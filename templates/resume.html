@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    
+</head>
+<nav>
+    <ul class="nav-links">
+        <li><a href="Home">Home</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Resume</a></li>
+    </ul>
+</nav>
+<body>
+    <header>
+        <div class="container">
+            <h2>Resume</h2>
+        </div>
+    </header>
+    <section>
+        <p>Check out my Resume</a> to learn more about my experience and skills.</p>
+    </section>
+    <object class="pdf" data="static/DeekshaReddy_Resume.pdf"
+            width="1200"
+            height="1200">
+    </object>
+
+
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <p>Email: <a href="mailto:deekshareddy.c@gmail.com">deekshareddy.c@gmail.com</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 [Deeksha Reddy]</p>
+        </div>
+    </footer>
+</body>
+</html>
+
