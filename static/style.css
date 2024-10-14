@@ -1,0 +1,152 @@
+/* Style for Portfolio Website */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header Styles */
+header {
+    background-image: url('BACKGROUND.jpg');
+    height: 60px;
+    color: rgb(0, 0, 0);
+    padding: 50px 0;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 3em;
+    margin: 0;
+}
+
+header p {
+    font-size: 1.2em;
+}
+
+/* Navigation Styles */
+nav {
+    background: linear-gradient(90deg, transparent, rgba(0, 0, 0, 0.4), transparent);
+    padding: 10px 0;
+    margin-right: 40px;
+    text-align: right;
+    position: fixed;
+    width: 100%;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+    color: black;
+}
+
+
+/* Container for the About section */
+.about {
+    display: flex;                /* Use flexbox to align items side by side */
+    align-items: center;          /* Vertically center the content */
+    justify-content: center;      /* Horizontally center the content */
+    padding: 50px;
+}
+
+/* Styling for the image */
+.about img {
+    width: 200px;                 /* Set the image width */
+    border-radius: 25%;           /* Make the image circular */
+    margin-right: 30px;           /* Add space between the image and the text */
+}
+
+/* Styling for the About Me description */
+.about-description {
+    max-width: 600px;             /* Restrict the width of the text */
+}
+
+.about-description h1 {
+    font-size: 2.5em;
+    color: #333;
+}
+
+.about-description p {
+    font-size: 1.2em;
+    color: #666;
+    line-height: 1.6;
+}
+
+
+/* Projects Section */
+.projects-section {
+    padding: 50px 0;
+    background-color: #f9f9f9;
+}
+
+.projects-section h2 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2em;
+}
+
+.project {
+    width: 80%;
+    margin: 0 auto 40px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.project h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.project p {
+    font-size: 1.1em;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 50px 0;
+    background-color: #fff;
+    text-align: center;
+}
+
+.contact-section h2 {
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.contact-section a {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.contact-section a:hover {
+    text-decoration: underline;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
