@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Personal Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    
+</head>
+<nav>
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="resume" target="_blank">Resume</a></li>
+    </ul>
+</nav>
+<body>
+    <header>
+        <div class="container">
+            <h1>Welcome to My Portfolio</h1>
+            <p>Showcasing My Work and Skills</p>
+        </div>
+    </header>
+
+    <section class="home">
+        <div class="about">
+            <!-- Add Image -->
+            <img src="static\AboutMePicture.jpg" alt="Profile Photo">
+            <div class="about-description">
+                <h1>About Me</h1>
+                <p>Hello! I'm Deeksha, a versatile and adaptable Salesforce Developer and UX Designer with significant experience in designing, coding, and
+                    implementing CRM systems. My strengths include a deep understanding of Salesforce methodologies, exceptional
+                    problem-solving abilities, and proficiency in Apex Classes, Visualforce Pages, Triggers, and Front-end Development.
+                    Proven track record of driving system enhancements that significantly boost operational efficiency.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="projects-section">
+        <div class="container">
+            <h2>Projects</h2>
+            <div class="project">
+                <h3>Data Platfrom</h3>
+                <p>A centralized platform that enables users to easily browse, search, and download datasets, generate customizable reports, leverage AI for assistance, and create and utilize templates.</p>
+                <a href="/static/Project1.pdf" target="_blank">View</a>
+            </div>
+            <div class="project">
+                <h3>Project 2</h3>
+                <p>Project 2 description.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="contact-section">
+        <div class="container">
+            <h2>Contact Me</h2>
+            <p>Email: <a href="mailto:deekshareddy.c@gmail.com">deekshareddy.c@gmail.com</a></p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 [Deeksha Reddy]</p>
+        </div>
+    </footer>
+</body>
+</html>
+
