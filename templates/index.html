@@ -21,7 +21,39 @@
             <p>Showcasing My Work and Skills</p>
         </div>
     </header>
+    {% if session.get('is_admin') %}
+    <div class="admin-options">
+        <button>Admin Option</button>
+        <h1>Delete Project</h1>
+        <form action="{{ url_for('delete_project') }}" method="POST">
+            <label for="project_id">Enter Project ID to delete:</label>
+            <input type="text" id="project_id" name="project_id" required>
+            <button type="submit">Delete Project</button>
+        </form> 
+    </div>
 
+    <h1>Add New Project</h1>
+    
+    <form action="{{ url_for('add_project') }}" method="POST" enctype="multipart/form-data">
+        <label for="project_name">Project Name:</label>
+        <input type="text" id="project_name" name="project_name" required><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4" cols="50" required></textarea><br>
+
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image" accept="image/*"><br>
+
+        <label for="pdf">Upload PDF:</label>
+        <input type="file" id="pdf" name="pdf" accept="application/pdf"><br>
+
+        <label for="link">Link to Project (Optional):</label>
+        <input type="text" id="link" name="link"><br>
+
+        <button type="submit">Add Project</button>
+    </form>
+    
+    {% endif %}
     <section class="home">
         <div class="about">
             <!-- Add Image -->
@@ -42,6 +74,7 @@
             {% for project in projects %}
             <div class="project">
                 <h2>{{ project.name }}</h2>
+                <p><strong>Project ID:</strong> {{ project.id }}</p>
                 {% if project.image %}
                 <a href="{{project.link}}" target="_blank">
                     <img src="{{ url_for('project_files', filename=project.image.split('project_files/')[1]) }}" alt="{{ project.name }} image">
@@ -67,6 +100,36 @@
             <p>Email: <a href="mailto:deekshareddy.c@gmail.com">deekshareddy.c@gmail.com</a></p>
         </div>
     </section>
+
+
+    <!--{% if session.get('is_admin') %}
+        <form action="{{ url_for('delete_project') }}" method="POST">
+            <label for="project_id">Enter Project ID to delete:</label>
+            <input type="text" id="project_id" name="project_id" required>
+            <button type="submit">Delete Project</button>
+        </form>
+
+        <h1>Delete Project</h1>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+        {% endwith %}
+        
+        <form method="POST">
+            <label for="project_id">Enter Project ID to Delete:</label>
+            <input type="text" name="project_id" id="project_id" required>
+            <button type="submit">Delete Project</button>
+        </form>
+
+    {% else %}
+        <p>You do not have permission to delete projects.</p>
+    {% endif %}-->
 
     <footer>
         <div class="container">

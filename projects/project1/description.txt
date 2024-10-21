@@ -1,9 +1,0 @@
-Our website is designed to streamline data access, reporting, and collaboration.
-We developed a centralized platform that enables users to easily browse, search, and download datasets, generate customizable reports, leverage AI for assistance, and create and utilize templates.
-Target Users:
-Researchers, Lecturers, Analysts
-Key Features:
-AI-powered assistance for data analysis and report generation.
-Real-time collaboration and data sharing tools.
-Pre-built query templates to simplify common research tasks.
-Add data from local desk to the website. 
