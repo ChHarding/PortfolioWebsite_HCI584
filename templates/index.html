@@ -3,67 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Personal Portfolio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    
+    <title>Deeksha Reddy | Portfolio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<nav>
-    <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><a href="resume" target="_blank">Resume</a></li>
-    </ul>
-</nav>
 <body>
-    <header>
-        <div class="container">
-            <h1>Welcome to My Portfolio</h1>
-            <p>Showcasing My Work and Skills</p>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <a href="#">DR</a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Projects</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="resume" target="_blank" class="resume-btn">Resume</a></li>
+                {% if session.get('is_admin') %}
+                    <li><a href="{{ url_for('logout') }}" class="logout-btn">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}" class="login-btn">Login</a></li>
+                {% endif %}
+            </ul>
         </div>
-    </header>
+    </nav>
 
-    <section class="home">
-        <div class="about">
-            <!-- Add Image -->
-            <img src="static\AboutMePicture.jpg" alt="Profile Photo">
-            <div class="about-description">
-                <h1>About Me</h1>
-                <p>Hello! I'm Deeksha, a versatile and adaptable Salesforce Developer and UX Designer with significant experience in designing, coding, and
-                    implementing CRM systems. My strengths include a deep understanding of Salesforce methodologies, exceptional
-                    problem-solving abilities, and proficiency in Apex Classes, Visualforce Pages, Triggers, and Front-end Development.
-                    Proven track record of driving system enhancements that significantly boost operational efficiency.
-                </p>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Hello, I'm <span class="highlight">Deeksha Reddy</span></h1>
+                <h2>Salesforce Developer & UX Designer</h2>
+                <p class="hero-text">Creating impactful solutions through code and design</p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="primary-btn">View Projects</a>
+                    <a href="#contact" class="secondary-btn">Contact Me</a>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="projects" class="projects-section">
-        <div class="container">
-            <h2>Projects</h2>
-            <div class="project">
-                <h3>Data Platfrom</h3>
-                <p>A centralized platform that enables users to easily browse, search, and download datasets, generate customizable reports, leverage AI for assistance, and create and utilize templates.</p>
-                <a href="/static/Project1.pdf" target="_blank">View</a>
-            </div>
-            <div class="project">
-                <h3>Project 2</h3>
-                <p>Project 2 description.</p>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="section-container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-image">
+                    <img src="static/AboutMePicture.jpg" alt="Profile Photo">
+                </div>
+                <div class="about-text">
+                    <p>Hello! I'm Deeksha, a versatile and adaptable Salesforce Developer and UX Designer with significant experience in designing, coding, and
+                        implementing CRM systems. My strengths include a deep understanding of Salesforce methodologies, exceptional
+                        problem-solving abilities, and proficiency in Apex Classes, Visualforce Pages, Triggers, and Front-end Development.</p>
+                    <div class="skills">
+                        <h3>Skills</h3>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Salesforce</span>
+                            <span class="skill-tag">Apex</span>
+                            <span class="skill-tag">Visualforce</span>
+                            <span class="skill-tag">UX Design</span>
+                            <span class="skill-tag">Front-end Development</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
-        <div class="container">
-            <h2>Contact Me</h2>
-            <p>Email: <a href="mailto:deekshareddy.c@gmail.com">deekshareddy.c@gmail.com</a></p>
+    <!-- Admin Section (if logged in) -->
+    {% if session.get('is_admin') %}
+    <div class="form-container">
+        <h1>Add New Project</h1>
+        
+        <form action="{{ url_for('add_project') }}" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="project_name">Project Name</label>
+                <input type="text" id="project_name" name="project_name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+            </div>
+    
+            <div class="form-group">
+                <div class="file-upload">
+                    <label for="image">Upload Image</label>
+                    <input type="file" id="image" name="image" accept="image/*">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <div class="file-upload">
+                    <label for="pdf">Upload PDF</label>
+                    <input type="file" id="pdf" name="pdf" accept="application/pdf">
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="link">Link to Project (Optional)</label>
+                <input type="text" id="link" name="link">
+            </div>
+    
+            <button type="submit" class="submit-btn">Add Project</button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="section-container">
+            <h2 class="section-title">Projects</h2>
+            <div class="projects-grid">
+                {% for project in projects %}
+                <div class="project-card">
+                    {% if project.image %}
+                    <div class="project-image">
+                        <a href="{{project.link}}" target="_blank">
+                            <img src="{{ url_for('project_files', filename=project.image.split('project_files/')[1]) }}" alt="{{ project.name }}">
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="project-content">
+                        <h3>{{ project.name }}</h3>
+                        <p>{{ project.description }}</p>
+                        <div class="project-links">
+                            {% if project.pdf %}
+                            <a href="{{ url_for('project_files', filename=project.pdf.split('project_files/')[1]) }}" class="project-link" target="_blank">
+                                <i class="fas fa-file-pdf"></i> View PDF
+                            </a>
+                            {% endif %}
+                            {% if project.link %}
+                            <a href="{{ project.link }}" class="project-link" target="_blank">
+                                <i class="fas fa-external-link-alt"></i> View Project
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% if session.get('is_admin') %}
+                        <form action="{{ url_for('delete_project') }}" method="POST" class="delete-form">
+                            <input type="hidden" name="project_id" value="{{ project.id }}">
+                            <button type="submit" class="delete-btn">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </section>
 
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 [Deeksha Reddy]</p>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="section-container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <a href="mailto:deekshareddy.c@gmail.com">deekshareddy.c@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <p>&copy; 2024 Deeksha Reddy | Portfolio</p>
         </div>
     </footer>
 </body>
 </html>
 
+<!-- 
+-created the login for admin through the top navigation
+-added the logout feature
+
+-adding the project from admin mode is defined and easier.
+
+-changed the layout, structure, styling of the whole web application to make it more user friendly
+
+-restructured the home and add_project class.
+-->
