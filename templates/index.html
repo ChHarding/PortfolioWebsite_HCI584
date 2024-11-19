@@ -6,6 +6,8 @@
     <title>Deeksha Reddy | Portfolio</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -73,43 +75,135 @@
 
     <!-- Admin Section (if logged in) -->
     {% if session.get('is_admin') %}
-    <div class="form-container">
-        <h1>Add New Project</h1>
-        
-        <form action="{{ url_for('add_project') }}" method="POST" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="project_name">Project Name</label>
-                <input type="text" id="project_name" name="project_name" required>
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">Add New Project</h3>
             </div>
-    
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="4" required></textarea>
+            <div class="card-body">
+                <form action="{{ url_for('add_project') }}" method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="project_name" class="form-label">Project Name</label>
+                        <input type="text" class="form-control" id="project_name" name="project_name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Project Images</label>
+                        <div id="image-container">
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" name="images" accept="image/*">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary" id="add-image">
+                            <i class="fas fa-plus me-1"></i> Add More Images
+                        </button>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="pdf" class="form-label">Upload PDF</label>
+                        <input type="file" class="form-control" id="pdf" name="pdf" accept="application/pdf">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="link" class="form-label">Link to Project (Optional)</label>
+                        <input type="text" class="form-control" id="link" name="link">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus-circle me-1"></i> Add Project
+                    </button>
+                </form>
             </div>
-    
-            <div class="form-group">
-                <div class="file-upload">
-                    <label for="image">Upload Image</label>
-                    <input type="file" id="image" name="image" accept="image/*">
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <div class="file-upload">
-                    <label for="pdf">Upload PDF</label>
-                    <input type="file" id="pdf" name="pdf" accept="application/pdf">
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <label for="link">Link to Project (Optional)</label>
-                <input type="text" id="link" name="link">
-            </div>
-    
-            <button type="submit" class="submit-btn">Add Project</button>
-        </form>
+        </div>
     </div>
     {% endif %}
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript for dynamic image fields -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addImageBtn = document.getElementById('add-image');
+            const imageContainer = document.getElementById('image-container');
+            let imageCount = 1;
+
+            addImageBtn.addEventListener('click', function() {
+                const newImageGroup = document.createElement('div');
+                newImageGroup.className = 'input-group mb-3';
+                
+                newImageGroup.innerHTML = `
+                    <input type="file" class="form-control" name="images" accept="image/*">
+                    <button class="btn btn-outline-danger remove-image" type="button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                
+                imageContainer.appendChild(newImageGroup);
+
+                // Add event listener to remove button
+                newImageGroup.querySelector('.remove-image').addEventListener('click', function() {
+                    newImageGroup.remove();
+                });
+            });
+        });
+
+        // Add this script to your template or a separate .js file
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all galleries
+            document.querySelectorAll('.project-images-gallery').forEach(gallery => {
+                updateGalleryCounter(gallery);
+            });
+        });
+
+        function prevImage(button) {
+            const gallery = button.closest('.project-images-gallery');
+            const images = gallery.querySelectorAll('.gallery-image');
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            
+            // Hide current image
+            images[currentIndex].classList.remove('active');
+            
+            // Calculate new index
+            currentIndex = currentIndex <= 0 ? images.length - 1 : currentIndex - 1;
+            
+            // Show new image
+            images[currentIndex].classList.add('active');
+            
+            updateGalleryCounter(gallery, currentIndex + 1);
+        }
+
+        function nextImage(button) {
+            const gallery = button.closest('.project-images-gallery');
+            const images = gallery.querySelectorAll('.gallery-image');
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            
+            // Hide current image
+            images[currentIndex].classList.remove('active');
+            
+            // Calculate new index
+            currentIndex = currentIndex >= images.length - 1 ? 0 : currentIndex + 1;
+            
+            // Show new image
+            images[currentIndex].classList.add('active');
+            
+            updateGalleryCounter(gallery, currentIndex + 1);
+        }
+
+        function updateGalleryCounter(gallery, currentIndex = 1) {
+            const counter = gallery.querySelector('.image-counter');
+            if (counter) {
+                const current = counter.querySelector('.current');
+                const total = gallery.querySelectorAll('.gallery-image').length;
+                current.textContent = currentIndex;
+            }
+        }
+    </script>
 
     <!-- Projects Section -->
     <section id="projects" class="projects">
@@ -118,19 +212,41 @@
             <div class="projects-grid">
                 {% for project in projects %}
                 <div class="project-card">
-                    {% if project.image %}
-                    <div class="project-image">
-                        <a href="{{project.link}}" target="_blank">
-                            <img src="{{ url_for('project_files', filename=project.image.split('project_files/')[1]) }}" alt="{{ project.name }}">
-                        </a>
+                    {% if project.images or project.image %}
+                    <div class="project-images-gallery">
+                        <!-- Show main image first -->
+                        {% if project.image %}
+                        <div class="gallery-image active">
+                            <img src="{{ url_for('static', filename=project.image) }}" alt="{{ project.name }}" class="main-image">
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Show additional images -->
+                        {% for image in project.images %}
+                        <div class="gallery-image">
+                            <img src="{{ url_for('static', filename=image.filename) }}" alt="{{ project.name }}" loading="lazy">
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Navigation buttons if there are multiple images -->
+                        {% if (project.images|length > 0) or project.image %}
+                        <button class="gallery-nav prev" onclick="prevImage(this)">❮</button>
+                        <button class="gallery-nav next" onclick="nextImage(this)">❯</button>
+                        
+                        <!-- Image counter -->
+                        <div class="image-counter">
+                            <span class="current">1</span>/<span class="total">{{ (project.images|length + (1 if project.image else 0)) }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endif %}
+                    
                     <div class="project-content">
                         <h3>{{ project.name }}</h3>
                         <p>{{ project.description }}</p>
                         <div class="project-links">
                             {% if project.pdf %}
-                            <a href="{{ url_for('project_files', filename=project.pdf.split('project_files/')[1]) }}" class="project-link" target="_blank">
+                            <a href="{{ url_for('static', filename=project.pdf) }}" class="project-link" target="_blank">
                                 <i class="fas fa-file-pdf"></i> View PDF
                             </a>
                             {% endif %}
@@ -179,14 +295,3 @@
     </footer>
 </body>
 </html>
-
-<!-- 
--created the login for admin through the top navigation
--added the logout feature
-
--adding the project from admin mode is defined and easier.
-
--changed the layout, structure, styling of the whole web application to make it more user friendly
-
--restructured the home and add_project class.
--->
