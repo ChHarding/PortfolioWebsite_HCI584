@@ -152,6 +152,57 @@
                 });
             });
         });
+
+        // Add this script to your template or a separate .js file
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize all galleries
+            document.querySelectorAll('.project-images-gallery').forEach(gallery => {
+                updateGalleryCounter(gallery);
+            });
+        });
+
+        function prevImage(button) {
+            const gallery = button.closest('.project-images-gallery');
+            const images = gallery.querySelectorAll('.gallery-image');
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            
+            // Hide current image
+            images[currentIndex].classList.remove('active');
+            
+            // Calculate new index
+            currentIndex = currentIndex <= 0 ? images.length - 1 : currentIndex - 1;
+            
+            // Show new image
+            images[currentIndex].classList.add('active');
+            
+            updateGalleryCounter(gallery, currentIndex + 1);
+        }
+
+        function nextImage(button) {
+            const gallery = button.closest('.project-images-gallery');
+            const images = gallery.querySelectorAll('.gallery-image');
+            let currentIndex = Array.from(images).findIndex(img => img.classList.contains('active'));
+            
+            // Hide current image
+            images[currentIndex].classList.remove('active');
+            
+            // Calculate new index
+            currentIndex = currentIndex >= images.length - 1 ? 0 : currentIndex + 1;
+            
+            // Show new image
+            images[currentIndex].classList.add('active');
+            
+            updateGalleryCounter(gallery, currentIndex + 1);
+        }
+
+        function updateGalleryCounter(gallery, currentIndex = 1) {
+            const counter = gallery.querySelector('.image-counter');
+            if (counter) {
+                const current = counter.querySelector('.current');
+                const total = gallery.querySelectorAll('.gallery-image').length;
+                current.textContent = currentIndex;
+            }
+        }
     </script>
 
     <!-- Projects Section -->
@@ -161,13 +212,35 @@
             <div class="projects-grid">
                 {% for project in projects %}
                 <div class="project-card">
-                    {% if project.image %}
-                    <div class="project-image">
-                        <a href="{{project.link}}" target="_blank">
-                            <img src="{{ url_for('static', filename=project.image) }}" alt="{{ project.name }}">
-                        </a>
+                    {% if project.images or project.image %}
+                    <div class="project-images-gallery">
+                        <!-- Show main image first -->
+                        {% if project.image %}
+                        <div class="gallery-image active">
+                            <img src="{{ url_for('static', filename=project.image) }}" alt="{{ project.name }}" class="main-image">
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Show additional images -->
+                        {% for image in project.images %}
+                        <div class="gallery-image">
+                            <img src="{{ url_for('static', filename=image.filename) }}" alt="{{ project.name }}" loading="lazy">
+                        </div>
+                        {% endfor %}
+                        
+                        <!-- Navigation buttons if there are multiple images -->
+                        {% if (project.images|length > 0) or project.image %}
+                        <button class="gallery-nav prev" onclick="prevImage(this)">❮</button>
+                        <button class="gallery-nav next" onclick="nextImage(this)">❯</button>
+                        
+                        <!-- Image counter -->
+                        <div class="image-counter">
+                            <span class="current">1</span>/<span class="total">{{ (project.images|length + (1 if project.image else 0)) }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endif %}
+                    
                     <div class="project-content">
                         <h3>{{ project.name }}</h3>
                         <p>{{ project.description }}</p>
@@ -222,14 +295,3 @@
     </footer>
 </body>
 </html>
-
-<!-- 
--created the login for admin through the top navigation
--added the logout feature
-
--adding the project from admin mode is defined and easier.
-
--changed the layout, structure, styling of the whole web application to make it more user friendly
-
--restructured the home and add_project class.
--->
