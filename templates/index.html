@@ -271,6 +271,96 @@
         </div>
     </section>
 
+    <section id="feedback" class="feedback mt-5">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">Leave Your Feedback</h3>
+                </div>
+                <div class="card-body">
+                    <form action="{{ url_for('submit_feedback') }}" method="POST">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="project" class="form-label">Select Project (Optional)</label>
+                            <select class="form-select" id="project" name="project">
+                                <option value="">Choose a project</option>
+                                {% for project in projects %}
+                                <option value="{{ project.id }}">{{ project.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="feedback" class="form-label">Your Feedback</label>
+                            <textarea class="form-control" id="feedback" name="feedback" rows="4" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Rating</label>
+                            <div class="rating">
+                                {% for i in range(1, 6) %}
+                                <input type="radio" name="rating" value="{{ i }}" id="rating-{{ i }}" class="d-none">
+                                <label for="rating-{{ i }}" class="star">
+                                    <i class="fas fa-star" data-rating="{{ i }}"></i>
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane me-1"></i> Submit Feedback
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add this CSS to your existing stylesheet or in a <style> tag -->
+    <style>
+        .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .rating .star {
+            color: #ddd;
+            font-size: 30px;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .rating .star:hover,
+        .rating .star:hover ~ .star {
+            color: #ffc107;
+        }
+        .rating input:checked ~ label {
+            color: #ffc107;
+        }
+    </style>
+
+    <!-- Add this JavaScript for interactive star rating -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.rating .star');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.querySelector('i').getAttribute('data-rating');
+                    const inputs = document.querySelectorAll('input[name="rating"]');
+                    inputs.forEach(input => {
+                        input.checked = input.value === rating;
+                    });
+                });
+            });
+        });
+    </script>
+
     <!-- Contact Section -->
     <section id="contact" class="contact">
         <div class="section-container">

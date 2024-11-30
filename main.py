@@ -4,6 +4,7 @@ from functools import wraps
 from werkzeug.utils import secure_filename
 import os
 import shutil
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = '1234'
@@ -157,6 +158,62 @@ def delete_project():
 @app.route('/static/<path:filename>')
 def serve_static(filename):
     return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
+
+# Add this to your existing Flask application
+
+# Create Feedback Model
+class Feedback(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(120), nullable=False)
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'), nullable=True)
+    feedback_text = db.Column(db.Text, nullable=False)
+    rating = db.Column(db.Integer, nullable=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship to Project (optional)
+    project = db.relationship('Project', backref=db.backref('feedbacks', lazy=True))
+
+@app.route('/submit_feedback', methods=['POST'])
+def submit_feedback():
+    try:
+        # Get form data
+        name = request.form['name']
+        email = request.form['email']
+        feedback_text = request.form['feedback']
+        project_id = request.form.get('project')
+        rating = request.form.get('rating')
+
+        # Create new feedback entry
+        new_feedback = Feedback(
+            name=name,
+            email=email,
+            feedback_text=feedback_text,
+            project_id=project_id if project_id else None,
+            rating=int(rating) if rating else None
+        )
+
+        # Add to database
+        db.session.add(new_feedback)
+        db.session.commit()
+
+        # Flash success message
+        flash('Thank you for your feedback!', 'success')
+    except Exception as e:
+        # Handle any errors
+        db.session.rollback()
+        flash(f'Error submitting feedback: {str(e)}', 'error')
+
+    # Redirect back to home page
+    return redirect(url_for('home'))
+
+# Update home route to include feedback display for admin
+@app.route('/view_feedback')
+@admin_required
+def view_feedback():
+    # Fetch all feedbacks, optionally filter by project
+    feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
+    return render_template('feedback.html', feedbacks=feedbacks)
 
 if __name__ == '__main__':
     with app.app_context():
