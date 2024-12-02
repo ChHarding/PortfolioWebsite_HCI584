@@ -57,8 +57,21 @@ def admin_required(f):
 
 @app.route('/')
 def home():
+
+    # Fetch all projects
     projects = Project.query.all()
-    return render_template('index.html', projects=projects)
+    
+    # Fetch feedbacks if admin is logged in
+    feedbacks = []
+    if session.get('is_admin'):
+        feedbacks = Feedback.query.order_by(Feedback.timestamp.desc()).all()
+    
+    is_admin = session.get('is_admin', False)
+
+    return render_template('index.html', 
+                           projects=projects, 
+                           feedbacks=feedbacks,
+                           is_admin=is_admin)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -75,6 +88,11 @@ def logout():
     session.clear()
     flash('You have been logged out successfully.')
     return redirect(url_for('home'))
+
+@app.route('/resume')
+def resume():
+    return send_from_directory('static', 'resume.pdf')
+
 
 @app.route('/add_project', methods=['POST'])
 @admin_required
@@ -158,8 +176,6 @@ def delete_project():
 @app.route('/static/<path:filename>')
 def serve_static(filename):
     return send_from_directory(os.path.join(BASE_DIR, 'static'), filename)
-
-# Add this to your existing Flask application
 
 # Create Feedback Model
 class Feedback(db.Model):
