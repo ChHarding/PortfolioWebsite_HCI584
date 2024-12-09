@@ -1,9 +1,10 @@
 # PortfolioWebsite_HCI584
- This project is to build a personal portfolio website using the Flask framework. The website will showcase the admin's professional projects, personal information, and an image gallery.
-User's Guide
+This project is to build a personal portfolio website using the Flask framework. The website will showcase the admin's professional projects, personal information, and an image gallery.
+ 
+# User's Guide
 
 # 1. Overview
-This is a Flask-based web application that serves as a portfolio and personal website. It allows the user to showcase their projects, resume, and other relevant information.
+This is a Flask-based web application that serves as a portfolio/personal website. It allows the admin user to showcase their projects, resumes and non-admin users to view it.
 
 # 2. Installation and Setup
 
@@ -17,6 +18,7 @@ To run the portfolio/website application, follow these steps:
      ```
      pip install -r requirements.txt
      ```
+   - Update the information/files such as resume, about me, skills according to your profile. 
 
 4. **Create the Database (if applicable)**
    This project uses a SQLite database to store the user's project information.
@@ -37,12 +39,11 @@ To run the portfolio/website application, follow these steps:
 
 ### Home Page
 When you first access the application, you'll see the home page, which provides a general introduction and navigation to other sections of the website.
-![image](https://github.com/user-attachments/assets/dbc62a56-63f8-4403-8f76-b5a3af4ac5ba)
-
+![image](https://github.com/user-attachments/assets/e9590f1a-5bd9-4c78-9eb7-de4de2300ddd)
 
 ### Project Showcase
 You can view a list of the portfolio owner's projects on the project showcase page. Each project is represented by a set of files in the `project_files` directory.
-![image](https://github.com/user-attachments/assets/e9590f1a-5bd9-4c78-9eb7-de4de2300ddd)
+![image](https://github.com/user-attachments/assets/dbc62a56-63f8-4403-8f76-b5a3af4ac5ba)
 
 
 ### Login (if applicable)
