@@ -96,7 +96,7 @@
                         <label class="form-label">Project Images</label>
                         <div id="image-container">
                             <div class="input-group mb-3">
-                                <input type="file" class="form-control" name="images" accept="image/*">
+                                <input type="file" class="form-control" name="images" accept=".jpeg,.jpg,.png">
                             </div>
                         </div>
                         <button type="button" class="btn btn-secondary" id="add-image">
@@ -214,18 +214,24 @@
                 <div class="project-card">
                     {% if project.images or project.image %}
                     <div class="project-images-gallery">
-                        <!-- Show main image first -->
-                        {% if project.image %}
+                        {% set displayed_images = {} %}
+                        
+                        <!-- Show main image first if it exists and hasn't been displayed -->
+                        {% if project.image and project.image not in displayed_images %}
                         <div class="gallery-image active">
                             <img src="{{ url_for('static', filename=project.image) }}" alt="{{ project.name }}" class="main-image">
                         </div>
+                        {% set displayed_images = displayed_images.update({project.image: 1}) or displayed_images %}
                         {% endif %}
                         
-                        <!-- Show additional images -->
+                        <!-- Show additional images, avoiding duplicates -->
                         {% for image in project.images %}
+                        {% if image.filename not in displayed_images %}
                         <div class="gallery-image">
                             <img src="{{ url_for('static', filename=image.filename) }}" alt="{{ project.name }}" loading="lazy">
                         </div>
+                        {% set displayed_images = displayed_images.update({image.filename: 1}) or displayed_images %}
+                        {% endif %}
                         {% endfor %}
                         
                         <!-- Navigation buttons if there are multiple images -->
@@ -235,7 +241,7 @@
                         
                         <!-- Image counter -->
                         <div class="image-counter">
-                            <span class="current">1</span>/<span class="total">{{ (project.images|length + (1 if project.image else 0)) }}</span>
+                            <span class="current">1</span>/<span class="total">{{ (project.images|length + (0 if project.image else 0)) }}</span>
                         </div>
                         {% endif %}
                     </div>
@@ -371,38 +377,53 @@
 </section>
 {% endif %}
 
-<!-- Rating style -->
-<style>
-    .rating .star {
-        color: #ddd;
-        font-size: 24px;
-        cursor: pointer;
-        transition: color 0.3s;
-    }
-    .rating .star:hover,
-    .rating .star:hover ~ .star {
-        color: #ffc107;
-    }
-    .rating input:checked ~ label {
-        color: #ffc107;
-    }
-</style>
 
 <!-- JavaScript for star rating -->
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const stars = document.querySelectorAll('.rating .star');
-        
-        stars.forEach(star => {
-            star.addEventListener('click', function() {
-                const rating = this.querySelector('i').getAttribute('data-rating');
-                const inputs = document.querySelectorAll('input[name="rating"]');
-                inputs.forEach(input => {
-                    input.checked = input.value === rating;
+    const stars = document.querySelectorAll('.rating .star');
+    
+    stars.forEach(star => {
+        star.addEventListener('mouseenter', function() {
+            const rating = this.querySelector('i').getAttribute('data-rating');
+            
+            // Reset all stars
+            stars.forEach(s => s.querySelector('i').style.color = '#ddd');
+            
+            // Color stars from left to right up to the hovered star
+            stars.forEach(s => {
+                const starRating = s.querySelector('i').getAttribute('data-rating');
+                if (parseInt(starRating) <= parseInt(rating)) {
+                    s.querySelector('i').style.color = '#ffc107';
+                }
+            });
+        });
+
+        star.addEventListener('mouseleave', function() {
+            // Restore colors based on checked state
+            const checkedStar = document.querySelector('input[name="rating"]:checked');
+            if (checkedStar) {
+                const checkedRating = checkedStar.value;
+                stars.forEach(s => {
+                    const starRating = s.querySelector('i').getAttribute('data-rating');
+                    s.querySelector('i').style.color = parseInt(starRating) <= parseInt(checkedRating) ? '#ffc107' : '#ddd';
                 });
+            } else {
+                stars.forEach(s => s.querySelector('i').style.color = '#ddd');
+            }
+        });
+
+        star.addEventListener('click', function() {
+            const rating = this.querySelector('i').getAttribute('data-rating');
+            
+            // Set the corresponding radio input
+            const inputs = document.querySelectorAll('input[name="rating"]');
+            inputs.forEach(input => {
+                input.checked = input.value === rating;
             });
         });
     });
+});
 </script>
 
     <!-- Contact Section -->
