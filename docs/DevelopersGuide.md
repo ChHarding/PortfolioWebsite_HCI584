@@ -126,3 +126,9 @@
 ## 6. Future Work
    Future improvements may include adding an edit project features and adding testimonials. 
 
+## TLDR: 
+This Flask web application is a personal portfolio management system designed to showcase projects with a simple, secure admin interface. Administrators can add, delete, and manage projects by uploading multiple images, PDFs, and providing detailed descriptions. The application uses SQLAlchemy for database management, allowing flexible storage of project information with support for multiple images per project and optional documentation.
+
+The system includes a straightforward authentication mechanism that allows admin-only access to project management features. Users can browse projects and submit feedback, which administrators can review. Each project can have multiple images, an optional PDF, and external links, providing a comprehensive way to display professional work. The feedback system enables visitors to provide comments and ratings, giving project owners insights into their work.
+
+Built with Flask and SQLite, the application prioritizes simplicity and functionality. It includes basic security measures like file upload restrictions, input sanitization, and session-based authentication. While the current implementation is relatively simple, it provides a solid foundation for a personal portfolio website that can be easily expanded with additional features like more robust user management, enhanced authentication, and advanced project tracking. 
