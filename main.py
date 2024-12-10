@@ -116,23 +116,36 @@ def add_project():
         db.session.flush()
 
         # Handle images
+        # Handle images
         images = request.files.getlist('images')
-        for i, image in enumerate(images):
+        existing_images = set()  # Track unique filenames
+
+        for image in images:
             if image and image.filename and allowed_file(image.filename):
                 filename = secure_filename(image.filename)
+                
+                # Skip if this exact filename has already been processed
+                if filename in existing_images:
+                    continue
+                
                 image_path = os.path.join(project_folder, filename)
                 image.save(image_path)
                 
                 relative_path = f'project_files/{project_name}/{filename}'
                 
-                if i == 0:  # Set first image as main project image
+                # Set first unique image as main project image
+                if not new_project.image:
                     new_project.image = relative_path
                 
+                # Only add unique images
                 new_image = ProjectImage(
                     filename=relative_path,
                     project_id=new_project.id
                 )
                 db.session.add(new_image)
+                
+                # Mark this filename as processed
+                existing_images.add(filename)
 
         # Handle PDF
         pdf_file = request.files.get('pdf')

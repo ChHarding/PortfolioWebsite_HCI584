@@ -565,3 +565,19 @@ body {
 .thumbnail.active {
     border-color: #007bff;
 }
+.rating .star {
+    color: #ddd;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.rating .star:hover ~ .star {
+    color: #ddd;
+}
+
+.rating .star:hover,
+.rating .star:hover ~ .star,
+.rating input:checked ~ label {
+    color: #ffc107;
+}
